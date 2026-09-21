@@ -495,8 +495,10 @@
     border: none;
     color: var(--accent-color);
     cursor: pointer;
-    margin-top: 18px;
+    margin-top: 12px;
     font-size: 0.85rem;
+    display: block;
+    width: 100%;
 }
 
 .auth-switch:hover { text-decoration: underline; }
@@ -521,6 +523,7 @@
             <input type="email" id="loginEmail" class="auth-input" placeholder="Email" autocomplete="email">
             <input type="password" id="loginPassword" class="auth-input" placeholder="Password" autocomplete="current-password">
             <button class="auth-button" onclick="loginUser()">🔐 Accedi</button>
+            <button class="auth-switch" onclick="showForgotPassword()">Password dimenticata?</button>
             <button class="auth-switch" onclick="showRegister()">Non hai un account? Registrati</button>
         </div>
 
@@ -531,6 +534,20 @@
             <input type="password" id="registerPasswordConfirm" class="auth-input" placeholder="Ripeti password" autocomplete="new-password">
             <button class="auth-button" onclick="registerUser()">👤 Crea Account</button>
             <button class="auth-switch" onclick="showLogin()">Hai già un account? Accedi</button>
+        </div>
+
+        <!-- PASSWORD DIMENTICATA -->
+        <div id="forgotForm" style="display:none;">
+            <input type="email" id="forgotEmail" class="auth-input" placeholder="Inserisci la tua Email" autocomplete="email">
+            <button class="auth-button" onclick="sendPasswordReset()">📧 Invia Link di Ripristino</button>
+            <button class="auth-switch" onclick="showLogin()">Torna al Login</button>
+        </div>
+
+        <!-- NUOVA PASSWORD (DOPO CLICK SU LINK EMAIL) -->
+        <div id="updatePasswordForm" style="display:none;">
+            <input type="password" id="newPassword" class="auth-input" placeholder="Nuova Password" autocomplete="new-password">
+            <input type="password" id="newPasswordConfirm" class="auth-input" placeholder="Conferma nuova Password" autocomplete="new-password">
+            <button class="auth-button" onclick="updateUserPassword()">🔑 Aggiorna Password</button>
         </div>
 
         <div id="authMessage" class="auth-message"></div>
@@ -703,18 +720,37 @@ let currentImages = [];
 // AUTHENTICATION FUNCTIONS
 // =========================
 
-function showLogin() {
-    document.getElementById('loginForm').style.display = 'block';
+function hideAllAuthForms() {
+    document.getElementById('loginForm').style.display = 'none';
     document.getElementById('registerForm').style.display = 'none';
-    document.getElementById('authSubtitle').innerText = 'Accedi al tuo Game Dev Studio';
+    document.getElementById('forgotForm').style.display = 'none';
+    document.getElementById('updatePasswordForm').style.display = 'none';
     document.getElementById('authMessage').innerText = '';
 }
 
+function showLogin() {
+    hideAllAuthForms();
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('authSubtitle').innerText = 'Accedi al tuo Game Dev Studio';
+}
+
 function showRegister() {
-    document.getElementById('loginForm').style.display = 'none';
+    hideAllAuthForms();
     document.getElementById('registerForm').style.display = 'block';
     document.getElementById('authSubtitle').innerText = 'Crea il tuo account DevVault';
-    document.getElementById('authMessage').innerText = '';
+}
+
+function showForgotPassword() {
+    hideAllAuthForms();
+    document.getElementById('forgotForm').style.display = 'block';
+    document.getElementById('authSubtitle').innerText = 'Recupero della password';
+}
+
+function showUpdatePassword() {
+    hideAllAuthForms();
+    document.getElementById('updatePasswordForm').style.display = 'block';
+    document.getElementById('authSubtitle').innerText = 'Imposta una nuova password';
+    document.getElementById('authScreen').style.display = 'flex';
 }
 
 function showAuthMessage(message, isError = false) {
@@ -752,7 +788,17 @@ async function registerUser() {
     showAuthMessage('Creazione account...');
     const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
-    if (error) return showAuthMessage('Errore: ' + error.message, true);
+    if (error) {
+        if (error.code === 'user_already_exists' || error.message.includes('already registered')) {
+            return showAuthMessage('Questa email è già registrata! Prova ad accedere o recuperare la password.', true);
+        }
+        return showAuthMessage('Errore: ' + error.message, true);
+    }
+
+    // Se la protezione enumerazione è attiva o l'utente esiste già, Supabase potrebbe non restituire utenti nuovi
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+        return showAuthMessage('Questa email risulta già registrata. Accedi o recupera la password.', true);
+    }
 
     if (!data.session) {
         showAuthMessage('Account creato! Controlla la tua email per confermare.');
@@ -764,7 +810,57 @@ async function registerUser() {
     await initApp();
 }
 
+async function sendPasswordReset() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    if (!email) return showAuthMessage('Inserisci la tua email.', true);
+
+    showAuthMessage('Invio email di ripristino...');
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href
+    });
+
+    if (error) return showAuthMessage('Errore: ' + error.message, true);
+
+    showAuthMessage('Email inviata! Controlla la tua casella di posta per resettare la password.');
+}
+
+async function updateUserPassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const newPasswordConfirm = document.getElementById('newPasswordConfirm').value;
+
+    if (!newPassword || !newPasswordConfirm) return showAuthMessage('Inserisci la nuova password.', true);
+    if (newPassword !== newPasswordConfirm) return showAuthMessage('Le password non coincidono.', true);
+    if (newPassword.length < 6) return showAuthMessage('La password deve avere almeno 6 caratteri.', true);
+
+    showAuthMessage('Aggiornamento password...');
+    const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+    if (error) return showAuthMessage('Errore: ' + error.message, true);
+
+    showAuthMessage('Password aggiornata con successo!');
+    setTimeout(() => {
+        showLogin();
+    }, 2000);
+}
+
 async function checkAuth() {
+    // Gestione dell'evento di recupero password tramite il link inviato via email
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+            showUpdatePassword();
+            return;
+        }
+
+        if (session) {
+            currentUser = session.user;
+            document.getElementById('authScreen').style.display = 'none';
+            await initApp();
+        } else {
+            currentUser = null;
+            document.getElementById('authScreen').style.display = 'flex';
+        }
+    });
+
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         currentUser = session.user;
@@ -782,16 +878,6 @@ async function logoutUser() {
     document.getElementById('authScreen').style.display = 'flex';
     showLogin();
 }
-
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        currentUser = session.user;
-        document.getElementById('authScreen').style.display = 'none';
-    } else {
-        currentUser = null;
-        document.getElementById('authScreen').style.display = 'flex';
-    }
-});
 
 // =========================
 // SUPABASE DATABASE LOGIC
@@ -817,7 +903,6 @@ async function fetchProjects() {
     userProjects = data || [];
 
     if (userProjects.length === 0) {
-        // Se l'utente non ha progetti, ne creiamo uno predefinito
         await createDefaultProject();
     } else {
         if (!activeProjectId || !userProjects.find(p => p.id === activeProjectId)) {
