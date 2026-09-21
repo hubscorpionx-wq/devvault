@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevVault</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
     const SUPABASE_URL = "https://dzdhlnyshpxqatguurgk.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_nzyIxuxUSGkqCfR68dTtJw_9nlF8Bsg";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_nzyIxuxUSGkqCfR68dTtJw_9nlF8Bsg";
 
     const supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
@@ -422,92 +423,91 @@
         .btn-card:hover { color: white; background-color: var(--border-color); }
         .btn-card.delete:hover { color: var(--color-bugs); }
 
-/* AUTH SCREEN */
-.auth-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 40%), #0b0f19;
-    padding: 20px;
-}
+        .auth-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 40%), #0b0f19;
+            padding: 20px;
+        }
 
-.auth-card {
-    width: 100%;
-    max-width: 420px;
-    background-color: #111827;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 35px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-    text-align: center;
-}
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background-color: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            text-align: center;
+        }
 
-.auth-logo {
-    width: 65px;
-    height: 65px;
-    margin: 0 auto 15px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    background-color: rgba(56, 189, 248, 0.15);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    font-size: 2rem;
-}
+        .auth-logo {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background-color: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            font-size: 2rem;
+        }
 
-.auth-card h1 { margin: 0; font-size: 1.8rem; }
-.auth-card p { color: var(--text-muted); margin-top: 8px; margin-bottom: 25px; }
+        .auth-card h1 { margin: 0; font-size: 1.8rem; }
+        .auth-card p { color: var(--text-muted); margin-top: 8px; margin-bottom: 25px; }
 
-.auth-input {
-    width: 100%;
-    background-color: #0d1322;
-    border: 1px solid var(--border-color);
-    color: white;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    margin-bottom: 12px;
-    outline: none;
-}
+        .auth-input {
+            width: 100%;
+            background-color: #0d1322;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
 
-.auth-input:focus { border-color: var(--accent-color); }
+        .auth-input:focus { border-color: var(--accent-color); }
 
-.auth-button {
-    width: 100%;
-    background-color: var(--accent-color);
-    color: #0b0f19;
-    border: none;
-    padding: 13px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-    margin-top: 5px;
-}
+        .auth-button {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: #0b0f19;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 5px;
+        }
 
-.auth-button:hover { opacity: 0.9; }
+        .auth-button:hover { opacity: 0.9; }
 
-.auth-switch {
-    background: none;
-    border: none;
-    color: var(--accent-color);
-    cursor: pointer;
-    margin-top: 12px;
-    font-size: 0.85rem;
-    display: block;
-    width: 100%;
-}
+        .auth-switch {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            display: block;
+            width: 100%;
+        }
 
-.auth-switch:hover { text-decoration: underline; }
-.auth-message { min-height: 20px; margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); }
+        .auth-switch:hover { text-decoration: underline; }
+        .auth-message { min-height: 20px; margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); }
 
-@media (max-width: 768px) {
-    .form-grid, .form-grid-code, .form-grid-img { grid-template-columns: 1fr; }
-    .code-grid { grid-template-columns: 1fr; }
-}
+        @media (max-width: 768px) {
+            .form-grid, .form-grid-code, .form-grid-img { grid-template-columns: 1fr; }
+            .code-grid { grid-template-columns: 1fr; }
+        }
 </style>
 </head>
 <body>
@@ -538,16 +538,9 @@
 
         <!-- PASSWORD DIMENTICATA -->
         <div id="forgotForm" style="display:none;">
-            <input type="email" id="forgotEmail" class="auth-input" placeholder="Inserisci la tua Email" autocomplete="email">
-            <button class="auth-button" onclick="sendPasswordReset()">📧 Invia Link di Ripristino</button>
+            <input type="email" id="forgotEmail" class="auth-input" placeholder="Inserisci la tua email" autocomplete="email">
+            <button class="auth-button" onclick="resetPassword()">📧 Invia Link di Recupero</button>
             <button class="auth-switch" onclick="showLogin()">Torna al Login</button>
-        </div>
-
-        <!-- NUOVA PASSWORD (DOPO CLICK SU LINK EMAIL) -->
-        <div id="updatePasswordForm" style="display:none;">
-            <input type="password" id="newPassword" class="auth-input" placeholder="Nuova Password" autocomplete="new-password">
-            <input type="password" id="newPasswordConfirm" class="auth-input" placeholder="Conferma nuova Password" autocomplete="new-password">
-            <button class="auth-button" onclick="updateUserPassword()">🔑 Aggiorna Password</button>
         </div>
 
         <div id="authMessage" class="auth-message"></div>
@@ -706,7 +699,6 @@
 </div>
 
 <script>
-// Fallback Immagine
 const fallbackImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230d1322'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23f87171' font-family='sans-serif' font-size='14'>⚠️ Immagine Non Trovata</text></svg>";
 
 let currentUser = null;
@@ -720,37 +712,28 @@ let currentImages = [];
 // AUTHENTICATION FUNCTIONS
 // =========================
 
-function hideAllAuthForms() {
-    document.getElementById('loginForm').style.display = 'none';
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block';
     document.getElementById('registerForm').style.display = 'none';
     document.getElementById('forgotForm').style.display = 'none';
-    document.getElementById('updatePasswordForm').style.display = 'none';
+    document.getElementById('authSubtitle').innerText = 'Accedi al tuo Game Dev Studio';
     document.getElementById('authMessage').innerText = '';
 }
 
-function showLogin() {
-    hideAllAuthForms();
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('authSubtitle').innerText = 'Accedi al tuo Game Dev Studio';
-}
-
 function showRegister() {
-    hideAllAuthForms();
+    document.getElementById('loginForm').style.display = 'none';
     document.getElementById('registerForm').style.display = 'block';
+    document.getElementById('forgotForm').style.display = 'none';
     document.getElementById('authSubtitle').innerText = 'Crea il tuo account DevVault';
+    document.getElementById('authMessage').innerText = '';
 }
 
 function showForgotPassword() {
-    hideAllAuthForms();
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'none';
     document.getElementById('forgotForm').style.display = 'block';
-    document.getElementById('authSubtitle').innerText = 'Recupero della password';
-}
-
-function showUpdatePassword() {
-    hideAllAuthForms();
-    document.getElementById('updatePasswordForm').style.display = 'block';
-    document.getElementById('authSubtitle').innerText = 'Imposta una nuova password';
-    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('authSubtitle').innerText = 'Recupera la tua password';
+    document.getElementById('authMessage').innerText = '';
 }
 
 function showAuthMessage(message, isError = false) {
@@ -788,17 +771,7 @@ async function registerUser() {
     showAuthMessage('Creazione account...');
     const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
-    if (error) {
-        if (error.code === 'user_already_exists' || error.message.includes('already registered')) {
-            return showAuthMessage('Questa email è già registrata! Prova ad accedere o recuperare la password.', true);
-        }
-        return showAuthMessage('Errore: ' + error.message, true);
-    }
-
-    // Se la protezione enumerazione è attiva o l'utente esiste già, Supabase potrebbe non restituire utenti nuovi
-    if (data.user && data.user.identities && data.user.identities.length === 0) {
-        return showAuthMessage('Questa email risulta già registrata. Accedi o recupera la password.', true);
-    }
+    if (error) return showAuthMessage('Errore: ' + error.message, true);
 
     if (!data.session) {
         showAuthMessage('Account creato! Controlla la tua email per confermare.');
@@ -810,57 +783,24 @@ async function registerUser() {
     await initApp();
 }
 
-async function sendPasswordReset() {
+async function resetPassword() {
     const email = document.getElementById('forgotEmail').value.trim();
-    if (!email) return showAuthMessage('Inserisci la tua email.', true);
+    if (!email) return showAuthMessage('Inserisci il tuo indirizzo email.', true);
 
-    showAuthMessage('Invio email di ripristino...');
+    showAuthMessage('Invio richiesta...');
+
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.href
+        redirectTo: window.location.origin + window.location.pathname
     });
 
-    if (error) return showAuthMessage('Errore: ' + error.message, true);
-
-    showAuthMessage('Email inviata! Controlla la tua casella di posta per resettare la password.');
-}
-
-async function updateUserPassword() {
-    const newPassword = document.getElementById('newPassword').value;
-    const newPasswordConfirm = document.getElementById('newPasswordConfirm').value;
-
-    if (!newPassword || !newPasswordConfirm) return showAuthMessage('Inserisci la nuova password.', true);
-    if (newPassword !== newPasswordConfirm) return showAuthMessage('Le password non coincidono.', true);
-    if (newPassword.length < 6) return showAuthMessage('La password deve avere almeno 6 caratteri.', true);
-
-    showAuthMessage('Aggiornamento password...');
-    const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
-
-    if (error) return showAuthMessage('Errore: ' + error.message, true);
-
-    showAuthMessage('Password aggiornata con successo!');
-    setTimeout(() => {
-        showLogin();
-    }, 2000);
+    if (error) {
+        showAuthMessage('Errore: ' + error.message, true);
+    } else {
+        showAuthMessage('Email inviata! Controlla la casella di posta.');
+    }
 }
 
 async function checkAuth() {
-    // Gestione dell'evento di recupero password tramite il link inviato via email
-    supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'PASSWORD_RECOVERY') {
-            showUpdatePassword();
-            return;
-        }
-
-        if (session) {
-            currentUser = session.user;
-            document.getElementById('authScreen').style.display = 'none';
-            await initApp();
-        } else {
-            currentUser = null;
-            document.getElementById('authScreen').style.display = 'flex';
-        }
-    });
-
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         currentUser = session.user;
@@ -878,6 +818,16 @@ async function logoutUser() {
     document.getElementById('authScreen').style.display = 'flex';
     showLogin();
 }
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (session) {
+        currentUser = session.user;
+        document.getElementById('authScreen').style.display = 'none';
+    } else {
+        currentUser = null;
+        document.getElementById('authScreen').style.display = 'flex';
+    }
+});
 
 // =========================
 // SUPABASE DATABASE LOGIC
@@ -1309,7 +1259,6 @@ function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-// Controllo iniziale della sessione all'avvio
 checkAuth();
 </script>
 </body>
